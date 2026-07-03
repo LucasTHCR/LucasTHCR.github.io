@@ -1,0 +1,44 @@
+title: LuckTAB Docs
+description: Lightweight yet powerful tab list, chat format & scoreboard plugin.
+url: "https://lucasthcr.github.io"
+baseurl: ""
+
+theme: just-the-docs
+
+# Color scheme — supports "light" and "dark"
+color_scheme: dark
+
+# Enable color scheme toggle (light/dark switcher)
+enable_copy_code_button: true
+
+# Navigation
+nav_sort: order
+
+# Footer
+footer_content: "Made with ❤️ by <a href='https://dc.gg/paperstream'>LucasTHCR</a> &nbsp;|&nbsp; <a href='https://modrinth.com/plugin/lucktab'>Modrinth</a>"
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Aux links (top right)
+aux_links:
+  "Modrinth":
+    - "https://modrinth.com/plugin/lucktab"
+  "Discord":
+    - "https://dc.gg/paperstream"
+  "bStats":
+    - "https://bstats.org/plugin/bukkit/LuckTAB%20by%20LucasTHCR/32022"
+
+aux_links_new_tab: true
+
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+
+# Back to top
+back_to_top: true
+back_to_top_text: "Back to top"
