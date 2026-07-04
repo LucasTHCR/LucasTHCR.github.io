@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuckTAB Docs</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #FF7700;
+    --accent2: #FF0000;
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --yellow: #e3b341;
+    --red: #f85149;
+    --code-bg: #161b22;
+  }
+  .light {
+    --bg: #ffffff;
+    --bg2: #f6f8fa;
+    --bg3: #eaeef2;
+    --border: #d0d7de;
+    --text: #1f2328;
+    --text2: #656d76;
+    --code-bg: #f6f8fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; transition: background 0.2s, color 0.2s; }
+
+  /* Layout */
+  .sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); overflow-y: auto; z-index: 100; padding: 0 0 2rem 0; }
+  .main { margin-left: 260px; padding: 2rem 3rem; max-width: 900px; }
+  @media (max-width: 768px) { .sidebar { transform: translateX(-100%); transition: transform 0.3s; } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; padding: 1rem; } .menu-btn { display: flex !important; } }
+
+  /* Sidebar */
+  .sidebar-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
+  .sidebar-header .logo { font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, var(--accent2), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .sidebar-header .version { font-size: 0.7rem; color: var(--text2); background: var(--bg3); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 999px; margin-left: auto; -webkit-text-fill-color: var(--text2); }
+  .nav-section { padding: 1rem 1rem 0; }
+  .nav-section-title { font-size: 0.7rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 0.5rem 0.5rem; }
+  .nav-link { display: block; padding: 0.4rem 0.5rem; border-radius: 6px; color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: all 0.15s; }
+  .nav-link:hover, .nav-link.active { background: var(--bg3); color: var(--text); }
+  .nav-link.active { color: var(--accent); font-weight: 500; }
+
+  /* Top bar */
+  .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .menu-btn { display: none; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+  .topbar-links { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+  .topbar-link { font-size: 0.8rem; color: var(--text2); text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 6px; transition: all 0.15s; }
+  .topbar-link:hover { color: var(--text); border-color: var(--text2); }
+  .theme-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+
+  /* Content sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Typography */
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  h1 .gradient { background: linear-gradient(90deg, var(--accent2), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h2 { font-size: 1.3rem; font-weight: 600; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--text2); }
+  p { margin-bottom: 1rem; color: var(--text2); }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Hero */
+  .hero { margin-bottom: 2rem; }
+  .hero p { font-size: 1.1rem; color: var(--text2); margin-bottom: 1.5rem; }
+  .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.15s; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
+  .btn-primary:hover { opacity: 0.9; text-decoration: none; }
+  .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--bg3); text-decoration: none; }
+
+  /* Stats */
+  .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1.25rem; text-align: center; flex: 1; min-width: 100px; }
+  .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.75rem; color: var(--text2); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: var(--bg3); padding: 0.6rem 1rem; text-align: left; font-weight: 600; border: 1px solid var(--border); font-size: 0.8rem; color: var(--text2); }
+  td { padding: 0.6rem 1rem; border: 1px solid var(--border); color: var(--text2); }
+  tr:nth-child(even) td { background: var(--bg2); }
+  td code, th code { background: var(--bg3); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: var(--accent); }
+
+  /* Code */
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 1rem 0; position: relative; }
+  pre code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; color: var(--text); background: none; padding: 0; }
+  code { background: var(--bg3); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.75rem; transition: all 0.15s; }
+  .copy-btn:hover { color: var(--text); }
+
+  /* Callouts */
+  .callout { padding: 0.75rem 1rem; border-radius: 8px; margin: 1rem 0; border-left: 3px solid; font-size: 0.9rem; }
+  .callout-info { background: rgba(88,166,255,0.1); border-color: var(--blue); color: var(--text); }
+  .callout-warn { background: rgba(227,179,65,0.1); border-color: var(--yellow); color: var(--text); }
+  .callout-tip { background: rgba(63,185,80,0.1); border-color: var(--green); color: var(--text); }
+
+  /* Feature grid */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+  .feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .feature-card .icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .feature-card .title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+  .feature-card .desc { font-size: 0.8rem; color: var(--text2); }
+
+  /* Badges */
+  .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-green { background: rgba(63,185,80,0.2); color: var(--green); }
+  .badge-yellow { background: rgba(227,179,65,0.2); color: var(--yellow); }
+  .badge-red { background: rgba(248,81,73,0.2); color: var(--red); }
+
+  /* Download progress */
+  #dl-status { display: none; color: var(--green); font-size: 0.85rem; margin-top: 0.5rem; }
+
+  /* Color preview */
+  .color-preview { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 4px; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="logo">LuckTAB</span>
+    <span class="version" id="sidebar-version">loading...</span>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">General</div>
+    <a class="nav-link active" href="#" onclick="show('home',this)">🏠 Home</a>
+    <a class="nav-link" href="#" onclick="show('getting-started',this)">🚀 Getting Started</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Reference</div>
+    <a class="nav-link" href="#" onclick="show('configuration',this)">⚙️ Configuration</a>
+    <a class="nav-link" href="#" onclick="show('colors',this)">🎨 Color Codes</a>
+    <a class="nav-link" href="#" onclick="show('placeholders',this)">📋 Placeholders</a>
+    <a class="nav-link" href="#" onclick="show('commands',this)">🔑 Commands</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Help</div>
+    <a class="nav-link" href="#" onclick="show('faq',this)">❓ FAQ</a>
+    <a class="nav-link" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
+    <a class="nav-link" href="https://modrinth.com/plugin/lucktab" target="_blank">📦 Modrinth</a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-links">
+      <a class="topbar-link" href="https://modrinth.com/plugin/lucktab" target="_blank">Modrinth</a>
+      <a class="topbar-link" href="https://dc.gg/paperstream" target="_blank">Discord</a>
+      <a class="topbar-link" href="https://bstats.org/plugin/bukkit/LuckTAB%20by%20LucasTHCR/32022" target="_blank">bStats</a>
+      <button class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="section active" id="section-home">
+    <div class="hero">
+      <h1><span class="gradient">LuckTAB</span></h1>
+      <p>Lightweight yet powerful tab list, chat format &amp; scoreboard plugin — all configurable in a single <code>config.yml</code>.</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="downloadLatest()">⬇ Download Latest</button>
+        <a class="btn btn-secondary" href="https://modrinth.com/plugin/lucktab" target="_blank">📦 Modrinth</a>
+        <a class="btn btn-secondary" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
+      </div>
+      <div id="dl-status">Fetching latest version...</div>
+      <div class="stats" id="stats">
+        <div class="stat"><div class="stat-value" id="stat-downloads">—</div><div class="stat-label">Downloads</div></div>
+        <div class="stat"><div class="stat-value" id="stat-followers">—</div><div class="stat-label">Followers</div></div>
+        <div class="stat"><div class="stat-value" id="stat-version">—</div><div class="stat-label">Latest Version</div></div>
+      </div>
+    </div>
+
+    <h2>✨ Features</h2>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="icon">📋</div><div class="title">Tab-List Prefix & Sorting</div><div class="desc">Rank-based prefixes via LuckPerms with anti-flicker updates.</div></div>
+      <div class="feature-card"><div class="icon">🌈</div><div class="title">Animated Gradients</div><div class="desc">Smooth sine-based RGB gradients via <code>&lt;gradient:&gt;</code> — works everywhere.</div></div>
+      <div class="feature-card"><div class="icon">🎨</div><div class="title">Hex Color Support</div><div class="desc">Full <code>&#RRGGBB</code> hex support in all elements.</div></div>
+      <div class="feature-card"><div class="icon">📊</div><div class="title">Scoreboard Sidebar</div><div class="desc">Per-world sidebar with anti-flicker and smart change detection.</div></div>
+      <div class="feature-card"><div class="icon">💬</div><div class="title">Chat Format</div><div class="desc">Custom format per rank with full color support.</div></div>
+      <div class="feature-card"><div class="icon">🌍</div><div class="title">Per-World Config</div><div class="desc">Different designs per world — fallback to default.</div></div>
+      <div class="feature-card"><div class="icon">👻</div><div class="title">Vanish Support</div><div class="desc">Essentials, CMI, SuperVanish, PremiumVanish compatible.</div></div>
+      <div class="feature-card"><div class="icon">📡</div><div class="title">PlaceholderAPI</div><div class="desc">Any PAPI placeholder works in all elements.</div></div>
+      <div class="feature-card"><div class="icon">🔄</div><div class="title">LuckPerms Migration</div><div class="desc">Sync prefixes between config and LuckPerms with auto weight.</div></div>
+      <div class="feature-card"><div class="icon">📶</div><div class="title">Ping Colors</div><div class="desc"><code>%lucktab_ping_colored%</code> — auto green/yellow/red.</div></div>
+    </div>
+
+    <h2>🖥️ Server Software</h2>
+    <table>
+      <tr><th>Feature</th><th>Paper</th><th>Spigot</th><th>Purpur</th></tr>
+      <tr><td>Tab list, chat, nametag</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
+      <tr><td>Hex & gradient colors</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
+      <tr><td>Scoreboard anti-flicker</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
+      <tr><td>Hex/gradient in scoreboard lines</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-yellow">⚠️ Legacy only</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
+    </table>
+    <div class="callout callout-tip">Recommended: Paper or Purpur for the full feature set.</div>
+
+    <h2>📦 Dependencies</h2>
+    <table>
+      <tr><th>Plugin</th><th>Required</th><th>Link</th></tr>
+      <tr><td>LuckPerms</td><td><span class="badge badge-red">Required</span></td><td><a href="https://luckperms.net" target="_blank">luckperms.net</a></td></tr>
+      <tr><td>PlaceholderAPI</td><td><span class="badge badge-green">Optional</span></td><td><a href="https://modrinth.com/plugin/placeholderapi" target="_blank">Modrinth</a></td></tr>
+    </table>
+  </div>
+
+  <!-- GETTING STARTED -->
+  <div class="section" id="section-getting-started">
+    <h1>🚀 Getting Started</h1>
+    <h2>Requirements</h2>
+    <table>
+      <tr><th>Requirement</th><th>Version</th></tr>
+      <tr><td>Paper / Purpur / Spigot</td><td>1.20+</td></tr>
+      <tr><td>Java</td><td>21+</td></tr>
+      <tr><td>LuckPerms</td><td>Latest</td></tr>
+    </table>
+
+    <h2>Installation</h2>
+    <ol style="color:var(--text2);padding-left:1.5rem;line-height:2">
+      <li>Download the latest version from <a href="https://modrinth.com/plugin/lucktab" target="_blank">Modrinth</a></li>
+      <li>Place the <code>.jar</code> into your <code>plugins/</code> folder</li>
+      <li>Make sure <strong>LuckPerms</strong> is installed</li>
+      <li>Start or restart your server</li>
+      <li>LuckTAB generates <code>plugins/LuckTAB/config.yml</code></li>
+      <li>Edit the config and run <code>/lucktab reload</code></li>
+    </ol>
+
+    <h2>Quick Setup</h2>
+    <p>Open <code>plugins/LuckTAB/config.yml</code> and configure your ranks:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>prefixes:
+  - "owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
+  - "admin;&#FF5555[Admin] &7;;&#FF5555"
+  - "mod;&#5555FF[Mod] &7;;&#5555FF"
+  - "vip;&6[VIP] &7;;&6"
+  - "default;&7[Player] &7;;&7"</code></pre>
+
+    <p>Format: <code>luckperms_group;prefix;suffix;namecolor</code></p>
+    <table>
+      <tr><th>Part</th><th>Description</th></tr>
+      <tr><td><code>group</code></td><td>Exact LuckPerms group name (case-sensitive)</td></tr>
+      <tr><td><code>prefix</code></td><td>Shown in tab list, nametag and chat</td></tr>
+      <tr><td><code>suffix</code></td><td>Leave empty with <code>;;</code> if not needed</td></tr>
+      <tr><td><code>namecolor</code></td><td>Color applied to the player name</td></tr>
+    </table>
+
+    <h2>LuckPerms Setup</h2>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lp user &lt;player&gt; group set owner</code></pre>
+    <div class="callout callout-info">The group name must match exactly what you have in the <code>prefixes</code> list.</div>
+
+    <h2>Migrate from LuckPerms</h2>
+    <p>Already have prefixes in LuckPerms? Pull them into config:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate from-luckperms</code></pre>
+    <p>Or push your config prefixes into LuckPerms:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate to-luckperms</code></pre>
+  </div>
+
+  <!-- CONFIGURATION -->
+  <div class="section" id="section-configuration">
+    <h1>⚙️ Configuration</h1>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ── Prefix Source ─────────────────────────────
+# lucktab   → use prefixes from this config (default)
+# luckperms → use prefixes directly from LuckPerms meta
+prefix-source: lucktab
+
+# ── Ping Colors ───────────────────────────────
+ping-colors:
+  good: 50    # &lt;= 50ms  → green
+  medium: 100 # &lt;= 100ms → yellow
+              # &gt;  100ms → red
+
+# ── Tab-List ──────────────────────────────────
+tab-list:
+  show-only-same-world: false
+
+# ── Chat Format ───────────────────────────────
+useChatFormat: true
+chatFormat: "%chatPrefix%%playerName% &8» &7%message%"
+
+# ── Rank Prefixes ─────────────────────────────
+# Format: "group;prefix;suffix;namecolor"
+# Top = highest priority | suffix can be empty: "group;prefix;;color"
+prefixes:
+  - "owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
+  - "admin;&#FF5555[Admin] &7;;&#FF5555"
+  - "mod;&#5555FF[Mod] &7;;&#5555FF"
+  - "vip;&6[VIP] &7;;&6"
+  - "default;&7[Player] &7;;&7"
+
+# ── Header & Footer ───────────────────────────
+# Per-world: add a section with the exact world name as key
+# Falls back to "default" if no world-specific design is found
+header-footer:
+  enabled: true
+  designs:
+    default:
+      header:
+        - ""
+        - "&lt;gradient:#FF5733:#FFC300&gt;   MyServer   &lt;/gradient&gt;"
+        - ""
+      footer:
+        - ""
+        - "&fOnline: &b%server_online%&7/&b%server_max_players%  &7| &fPing: %lucktab_ping_colored%"
+        - ""
+    # world_nether:
+    #   header:
+    #     - "&4&l  The Nether  "
+    #   footer:
+    #     - "&fPing: %lucktab_ping_colored%"
+
+# ── Scoreboard Sidebar ────────────────────────
+scoreboard:
+  enabled: true
+  designs:
+    default:
+      title: "&lt;gradient:#FF0000:#FF7700&gt;MyServer&lt;/gradient&gt;"
+      lines:
+        - ""
+        - "&7Rank: %lucktab_rank%"
+        - "&7Ping: %lucktab_ping_colored%"
+        - ""
+        - "&7World: &f%world%"
+        - ""
+        - "&7Online: &f%server_online%&8/&f%server_max_players%"
+        - ""</code></pre>
+
+    <h2>Prefix Source</h2>
+    <table>
+      <tr><th>Value</th><th>Description</th></tr>
+      <tr><td><code>lucktab</code></td><td>Prefixes are read from config (default)</td></tr>
+      <tr><td><code>luckperms</code></td><td>Prefixes read directly from LuckPerms player meta — respects inheritance</td></tr>
+    </table>
+
+    <h2>Per-World Designs</h2>
+    <p>Add a section with the <strong>exact world name</strong> under <code>designs</code>. LuckTAB falls back to <code>default</code> automatically.</p>
+    <div class="callout callout-tip">World names are case-sensitive. Use <code>/mv list</code> or check your server folder to get the exact name.</div>
+
+    <h2>Rank Priority</h2>
+    <p>The <strong>order</strong> of entries in <code>prefixes</code> determines priority — <strong>top = highest</strong>. If a player has multiple groups, the highest entry wins.</p>
+  </div>
+
+  <!-- COLORS -->
+  <div class="section" id="section-colors">
+    <h1>🎨 Color Codes</h1>
+
+    <h2>Legacy Color Codes</h2>
+    <table>
+      <tr><th>Code</th><th>Color</th><th>Code</th><th>Format</th></tr>
+      <tr><td><code>&0</code></td><td><span class="color-preview" style="background:#000"></span>Black</td><td><code>&l</code></td><td><strong>Bold</strong></td></tr>
+      <tr><td><code>&1</code></td><td><span class="color-preview" style="background:#00a"></span>Dark Blue</td><td><code>&o</code></td><td><em>Italic</em></td></tr>
+      <tr><td><code>&2</code></td><td><span class="color-preview" style="background:#0a0"></span>Dark Green</td><td><code>&n</code></td><td><u>Underline</u></td></tr>
+      <tr><td><code>&3</code></td><td><span class="color-preview" style="background:#0aa"></span>Dark Aqua</td><td><code>&m</code></td><td><s>Strike</s></td></tr>
+      <tr><td><code>&4</code></td><td><span class="color-preview" style="background:#a00"></span>Dark Red</td><td><code>&k</code></td><td>Obfuscated</td></tr>
+      <tr><td><code>&5</code></td><td><span class="color-preview" style="background:#a0a"></span>Dark Purple</td><td><code>&r</code></td><td>Reset</td></tr>
+      <tr><td><code>&6</code></td><td><span class="color-preview" style="background:#fa0"></span>Gold</td><td></td><td></td></tr>
+      <tr><td><code>&7</code></td><td><span class="color-preview" style="background:#aaa"></span>Gray</td><td></td><td></td></tr>
+      <tr><td><code>&8</code></td><td><span class="color-preview" style="background:#555"></span>Dark Gray</td><td></td><td></td></tr>
+      <tr><td><code>&9</code></td><td><span class="color-preview" style="background:#55f"></span>Blue</td><td></td><td></td></tr>
+      <tr><td><code>&a</code></td><td><span class="color-preview" style="background:#5f5"></span>Green</td><td></td><td></td></tr>
+      <tr><td><code>&b</code></td><td><span class="color-preview" style="background:#5ff"></span>Aqua</td><td></td><td></td></tr>
+      <tr><td><code>&c</code></td><td><span class="color-preview" style="background:#f55"></span>Red</td><td></td><td></td></tr>
+      <tr><td><code>&d</code></td><td><span class="color-preview" style="background:#f5f"></span>Light Purple</td><td></td><td></td></tr>
+      <tr><td><code>&e</code></td><td><span class="color-preview" style="background:#ff5"></span>Yellow</td><td></td><td></td></tr>
+      <tr><td><code>&f</code></td><td><span class="color-preview" style="background:#fff;border-color:#aaa"></span>White</td><td></td><td></td></tr>
+    </table>
+
+    <h2>Hex Colors</h2>
+    <p>Use <code>&#RRGGBB</code> for any RGB color:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Red prefix
+"admin;&#FF0000[Admin] &7;;&#FF0000"
+
+# Orange gradient color
+"owner;[Owner] ;;&# FF7700"
+
+# Custom purple
+"mod;&#AA00FF[Mod] &7;;&#AA00FF"</code></pre>
+
+    <h2>Animated Gradients</h2>
+    <p>Use <code>&lt;gradient:#RRGGBB:#RRGGBB&gt;text&lt;/gradient&gt;</code>:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Red to orange
+"owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
+
+# Blue to purple
+"admin;&lt;gradient:#5555FF:#AA00FF&gt;[Admin] &lt;/gradient&gt;;;&#5555FF"
+
+# Bold formatting preserved inside gradient
+"owner;&lt;gradient:#FF0000:#FF7700&gt;&l[Owner]&r &lt;/gradient&gt;;;&#FF7700"</code></pre>
+    <div class="callout callout-warn">Hex colors and gradients in scoreboard lines require Paper or Purpur. On Spigot, only legacy <code>&</code> codes work in scoreboard lines.</div>
+  </div>
+
+  <!-- PLACEHOLDERS -->
+  <div class="section" id="section-placeholders">
+    <h1>📋 Placeholders</h1>
+    <h2>Built-in Placeholders</h2>
+    <table>
+      <tr><th>Placeholder</th><th>Description</th><th>Example</th></tr>
+      <tr><td><code>%player%</code></td><td>Player name</td><td>LucasTHCR</td></tr>
+      <tr><td><code>%world%</code></td><td>Current world name</td><td>world</td></tr>
+      <tr><td><code>%server_online%</code></td><td>Online player count</td><td>5</td></tr>
+      <tr><td><code>%server_max_players%</code></td><td>Max player count</td><td>20</td></tr>
+      <tr><td><code>%player_ping%</code></td><td>Ping in ms (plain)</td><td>42</td></tr>
+      <tr><td><code>%lucktab_ping_colored%</code></td><td>Ping colored green/yellow/red</td><td>§a42ms</td></tr>
+      <tr><td><code>%lucktab_rank%</code></td><td>Colored rank prefix</td><td>§c[Admin] §7</td></tr>
+      <tr><td><code>%lucktab_prefix%</code></td><td>Same as %lucktab_rank%</td><td>§c[Admin] §7</td></tr>
+      <tr><td><code>%lucktab_suffix%</code></td><td>Rank suffix</td><td>§7[Staff]</td></tr>
+      <tr><td><code>%lucktab_color%</code></td><td>Rank name color</td><td>§c</td></tr>
+      <tr><td><code>%lucktab_rank_display%</code></td><td>Prefix + color + group + suffix</td><td>§c[Admin] §cAdmin</td></tr>
+      <tr><td><code>%chatPrefix%</code></td><td>Rank prefix (chat only)</td><td>§c[Admin] §7</td></tr>
+      <tr><td><code>%chatSuffix%</code></td><td>Rank suffix (chat only)</td><td></td></tr>
+    </table>
+
+    <h2>Ping Color Thresholds</h2>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>ping-colors:
+  good: 50    # &lt;= 50ms  → green  (&a)
+  medium: 100 # &lt;= 100ms → yellow (&e)
+              # &gt;  100ms → red    (&c)</code></pre>
+
+    <h2>PlaceholderAPI</h2>
+    <p>If PlaceholderAPI is installed, any third-party placeholder works everywhere:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>lines:
+  - "&7Balance: &f%vault_eco_balance%"
+  - "&7Deaths: &f%statistic_deaths%"
+  - "&7Level: &f%player_level%"</code></pre>
+    <div class="callout callout-info">PlaceholderAPI placeholders are processed after LuckTAB built-in placeholders.</div>
+  </div>
+
+  <!-- COMMANDS -->
+  <div class="section" id="section-commands">
+    <h1>🔑 Commands & Permissions</h1>
+    <table>
+      <tr><th>Command</th><th>Permission</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>/lucktab reload</code></td><td><code>lucktab.reload</code></td><td>OP</td><td>Reload config without restart</td></tr>
+      <tr><td><code>/lucktab migrate to-luckperms</code></td><td><code>lucktab.migrate</code></td><td>OP</td><td>Push config prefixes to LuckPerms</td></tr>
+      <tr><td><code>/lucktab migrate from-luckperms</code></td><td><code>lucktab.migrate</code></td><td>OP</td><td>Pull LuckPerms prefixes to config</td></tr>
+    </table>
+
+    <h2>/lucktab migrate to-luckperms</h2>
+    <p>Pushes all prefixes and suffixes from <code>config.yml</code> into LuckPerms group meta with automatic weight calculation:</p>
+    <table>
+      <tr><th>Rank position</th><th>Weight</th><th>Prefix priority</th></tr>
+      <tr><td>1st (top)</td><td>200</td><td>200</td></tr>
+      <tr><td>2nd</td><td>190</td><td>190</td></tr>
+      <tr><td>3rd</td><td>180</td><td>180</td></tr>
+      <tr><td>...</td><td>...</td><td>...</td></tr>
+    </table>
+    <div class="callout callout-tip">Only LuckTAB-managed nodes are overwritten — other plugins' nodes are preserved.</div>
+
+    <h2>/lucktab migrate from-luckperms</h2>
+    <p>Pulls all group prefixes and suffixes from LuckPerms into <code>config.yml</code>. Groups without a prefix are skipped. Config is saved and rank map reloaded automatically.</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate from-luckperms
+/lucktab reload</code></pre>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="section-faq">
+    <h1>❓ FAQ</h1>
+
+    <h2>My rank prefix is not showing</h2>
+    <ol style="color:var(--text2);padding-left:1.5rem;line-height:2">
+      <li>Make sure the group name in <code>prefixes</code> matches exactly the LuckPerms group name</li>
+      <li>Check player group: <code>/lp user &lt;player&gt; info</code></li>
+      <li>Run <code>/lucktab reload</code></li>
+      <li>Top entry = highest priority — make sure owner is above default</li>
+    </ol>
+
+    <h2>The scoreboard is flickering</h2>
+    <p>Make sure you are running <strong>Paper or Purpur</strong>. On Spigot, scoreboard lines with hex/gradient colors may flicker slightly due to a Minecraft client limitation.</p>
+
+    <h2>Gradients look choppy or jump</h2>
+    <p>This can happen if the text is very short (few characters = few color steps). Longer text produces smoother gradients. The animation uses sine-based interpolation which is smooth by design.</p>
+
+    <h2>%lucktab_rank% shows raw gradient tag</h2>
+    <p>LuckTAB cannot find a matching rank for the player. Make sure:</p>
+    <ul style="color:var(--text2);padding-left:1.5rem;line-height:2">
+      <li>The player has a LuckPerms group assigned</li>
+      <li>That group exists in the <code>prefixes</code> list</li>
+      <li>The group name matches exactly (case-sensitive)</li>
+    </ul>
+
+    <h2>Does LuckTAB work on Folia?</h2>
+    <p>No. LuckTAB uses Bukkit's scheduler which is not Folia-compatible. There are no plans to support Folia.</p>
+
+    <h2>Does LuckTAB work on BungeeCord/Velocity?</h2>
+    <p>LuckTAB is a per-server plugin. For network-wide player counts, use a PlaceholderAPI expansion that supports BungeeCord.</p>
+
+    <h2>How do I report a bug?</h2>
+    <p>Join the Discord: <a href="https://dc.gg/paperstream" target="_blank">dc.gg/paperstream</a></p>
+  </div>
+
+</main>
+
+<script>
+// Navigation
+function show(page, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-' + page).classList.add('active');
+  if (el) el.classList.add('active');
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  return false;
+}
+
+// Sidebar toggle
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Theme toggle
+let isDark = true;
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  document.querySelector('.theme-btn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+}
+
+// Copy code
+function copyCode(btn) {
+  const code = btn.nextElementSibling.textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// Download latest via Modrinth API
+async function downloadLatest() {
+  const status = document.getElementById('dl-status');
+  status.style.display = 'block';
+  status.textContent = 'Fetching latest version...';
+  try {
+    const res = await fetch('https://api.modrinth.com/v2/project/MzWKBKRk/version');
+    const versions = await res.json();
+    if (versions && versions.length > 0) {
+      const latest = versions[0];
+      const file = latest.files.find(f => f.primary) || latest.files[0];
+      if (file) {
+        status.textContent = 'Downloading ' + latest.version_number + '...';
+        window.location.href = file.url;
+        setTimeout(() => status.style.display = 'none', 3000);
+        return;
+      }
+    }
+    throw new Error('No file found');
+  } catch(e) {
+    status.textContent = 'Redirecting to Modrinth...';
+    window.location.href = 'https://modrinth.com/plugin/lucktab/versions';
+  }
+}
+
+// Load stats from Modrinth API
+async function loadStats() {
+  try {
+    const [project, versions] = await Promise.all([
+      fetch('https://api.modrinth.com/v2/project/MzWKBKRk').then(r => r.json()),
+      fetch('https://api.modrinth.com/v2/project/MzWKBKRk/version').then(r => r.json())
+    ]);
+    document.getElementById('stat-downloads').textContent = project.downloads?.toLocaleString() || '—';
+    document.getElementById('stat-followers').textContent = project.followers?.toLocaleString() || '—';
+    if (versions && versions.length > 0) {
+      const v = versions[0].version_number;
+      document.getElementById('stat-version').textContent = v;
+      document.getElementById('sidebar-version').textContent = v;
+    }
+  } catch(e) {
+    document.getElementById('sidebar-version').textContent = 'latest';
+  }
+}
+
+loadStats();
+</script>
+</body>
+</html>
