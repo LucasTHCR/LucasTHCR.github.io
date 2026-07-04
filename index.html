@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuckTAB Docs</title>
+<title>LucasTHCR Plugins — Docs</title>
 <style>
   :root {
     --bg: #0d1117;
@@ -38,31 +38,46 @@
   .main { margin-left: 260px; padding: 2rem 3rem; max-width: 900px; }
   @media (max-width: 768px) { .sidebar { transform: translateX(-100%); transition: transform 0.3s; } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; padding: 1rem; } .menu-btn { display: flex !important; } }
 
+  /* Plugin switcher */
+  .plugin-switch { display: flex; gap: 0.4rem; padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); }
+  .plugin-btn { flex: 1; padding: 0.5rem 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); font-size: 0.78rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .plugin-btn.active { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; border-color: transparent; }
+  .plugin-btn:hover:not(.active) { color: var(--text); border-color: var(--text2); }
+
   /* Sidebar */
-  .sidebar-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
-  .sidebar-header .logo { font-size: 1.1rem; font-weight: 700; background: linear-gradient(90deg, var(--accent2), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .sidebar-header .version { font-size: 0.7rem; color: var(--text2); background: var(--bg3); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 999px; margin-left: auto; -webkit-text-fill-color: var(--text2); }
+  .sidebar-header { padding: 1.2rem 1.5rem 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+  .sidebar-header .logo { font-size: 1.1rem; font-weight: 700; }
+  .logo-lucktab { background: linear-gradient(90deg, var(--accent2), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .logo-vdt { color: var(--blue); }
+  .sidebar-header .version { font-size: 0.7rem; color: var(--text2); background: var(--bg3); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 999px; margin-left: auto; }
   .nav-section { padding: 1rem 1rem 0; }
   .nav-section-title { font-size: 0.7rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 0.5rem 0.5rem; }
   .nav-link { display: block; padding: 0.4rem 0.5rem; border-radius: 6px; color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: all 0.15s; }
   .nav-link:hover, .nav-link.active { background: var(--bg3); color: var(--text); }
   .nav-link.active { color: var(--accent); font-weight: 500; }
+  #sidebar-vdt .nav-link.active { color: var(--blue); }
 
   /* Top bar */
   .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
   .menu-btn { display: none; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 1rem; }
-  .topbar-links { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+  .topbar-links { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; align-items: center; }
   .topbar-link { font-size: 0.8rem; color: var(--text2); text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 6px; transition: all 0.15s; }
   .topbar-link:hover { color: var(--text); border-color: var(--text2); }
   .theme-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  .discord-badge img { display: block; height: 28px; }
+  .discord-banner { display: flex; justify-content: center; margin: 1.5rem 0; }
+  .discord-banner img { height: 36px; }
 
   /* Content sections */
+  .plugin-page { display: none; }
+  .plugin-page.active { display: block; }
   .section { display: none; }
   .section.active { display: block; }
 
   /* Typography */
   h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
   h1 .gradient { background: linear-gradient(90deg, var(--accent2), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h1 .gradient-blue { color: var(--blue); }
   h2 { font-size: 1.3rem; font-weight: 600; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
   h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--text2); }
   p { margin-bottom: 1rem; color: var(--text2); }
@@ -72,10 +87,11 @@
   /* Hero */
   .hero { margin-bottom: 2rem; }
   .hero p { font-size: 1.1rem; color: var(--text2); margin-bottom: 1.5rem; }
-  .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center; }
   .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.15s; }
   .btn-primary { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: white; }
-  .btn-primary:hover { opacity: 0.9; text-decoration: none; }
+  .btn-primary-blue { background: linear-gradient(135deg, #1f6feb, var(--blue)); color: white; }
+  .btn-primary:hover, .btn-primary-blue:hover { opacity: 0.9; text-decoration: none; }
   .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
   .btn-secondary:hover { background: var(--bg3); text-decoration: none; }
 
@@ -83,6 +99,7 @@
   .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
   .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1.25rem; text-align: center; flex: 1; min-width: 100px; }
   .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .stat-value.blue { color: var(--blue); }
   .stat-label { font-size: 0.75rem; color: var(--text2); }
 
   /* Tables */
@@ -123,55 +140,100 @@
 
   /* Color preview */
   .color-preview { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 4px; border: 1px solid var(--border); }
+
+  /* Footer credits */
+  .credits { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
 </style>
 </head>
 <body>
 
-<aside class="sidebar" id="sidebar">
+<!-- ============ SIDEBAR: LUCKTAB ============ -->
+<aside class="sidebar" id="sidebar-lucktab">
+  <div class="plugin-switch">
+    <button class="plugin-btn active" onclick="switchPlugin('lucktab', this)">LuckTAB</button>
+    <button class="plugin-btn" onclick="switchPlugin('vdt', this)">ViewDistanceTweaks</button>
+  </div>
   <div class="sidebar-header">
-    <span class="logo">LuckTAB</span>
+    <span class="logo logo-lucktab">LuckTAB</span>
     <span class="version" id="sidebar-version">loading...</span>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">General</div>
-    <a class="nav-link active" href="#" onclick="show('home',this)">🏠 Home</a>
-    <a class="nav-link" href="#" onclick="show('getting-started',this)">🚀 Getting Started</a>
+    <a class="nav-link active" href="#" onclick="show('lt-home',this)">🏠 Home</a>
+    <a class="nav-link" href="#" onclick="show('lt-getting-started',this)">🚀 Getting Started</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Reference</div>
-    <a class="nav-link" href="#" onclick="show('configuration',this)">⚙️ Configuration</a>
-    <a class="nav-link" href="#" onclick="show('colors',this)">🎨 Color Codes</a>
-    <a class="nav-link" href="#" onclick="show('placeholders',this)">📋 Placeholders</a>
-    <a class="nav-link" href="#" onclick="show('commands',this)">🔑 Commands</a>
+    <a class="nav-link" href="#" onclick="show('lt-configuration',this)">⚙️ Configuration</a>
+    <a class="nav-link" href="#" onclick="show('lt-colors',this)">🎨 Color Codes</a>
+    <a class="nav-link" href="#" onclick="show('lt-placeholders',this)">📋 Placeholders</a>
+    <a class="nav-link" href="#" onclick="show('lt-commands',this)">🔑 Commands</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Help</div>
-    <a class="nav-link" href="#" onclick="show('faq',this)">❓ FAQ</a>
+    <a class="nav-link" href="#" onclick="show('lt-faq',this)">❓ FAQ</a>
     <a class="nav-link" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
     <a class="nav-link" href="https://modrinth.com/plugin/lucktab" target="_blank">📦 Modrinth</a>
   </div>
 </aside>
 
-<main class="main">
+<!-- ============ SIDEBAR: VIEWDISTANCETWEAKS ============ -->
+<aside class="sidebar" id="sidebar-vdt" style="display:none;">
+  <div class="plugin-switch">
+    <button class="plugin-btn" onclick="switchPlugin('lucktab', this)">LuckTAB</button>
+    <button class="plugin-btn active" onclick="switchPlugin('vdt', this)">ViewDistanceTweaks</button>
+  </div>
+  <div class="sidebar-header">
+    <span class="logo logo-vdt">ViewDistanceTweaks</span>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">General</div>
+    <a class="nav-link active" href="#" onclick="show('vdt-home',this)">🏠 Home</a>
+    <a class="nav-link" href="#" onclick="show('vdt-changelog',this)">📝 Changelog</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Reference</div>
+    <a class="nav-link" href="#" onclick="show('vdt-configuration',this)">⚙️ Configuration</a>
+    <a class="nav-link" href="#" onclick="show('vdt-commands',this)">🔑 Commands</a>
+    <a class="nav-link" href="#" onclick="show('vdt-placeholders',this)">📋 Placeholders</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Help</div>
+    <a class="nav-link" href="#" onclick="show('vdt-howitworks',this)">🔧 How It Works</a>
+    <a class="nav-link" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
+  </div>
+</aside>
+
+<!-- ============================================================= -->
+<!-- LUCKTAB MAIN -->
+<!-- ============================================================= -->
+<main class="main plugin-page active" id="page-lucktab">
   <div class="topbar">
-    <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()">☰</button>
+    <button class="menu-btn" id="menu-btn-lucktab" onclick="toggleSidebar('lucktab')">☰</button>
     <div class="topbar-links">
       <a class="topbar-link" href="https://modrinth.com/plugin/lucktab" target="_blank">Modrinth</a>
-      <a class="topbar-link" href="https://dc.gg/paperstream" target="_blank">Discord</a>
+      <a class="discord-badge" href="https://dc.gg/paperstream" target="_blank">
+        <img src="https://img.shields.io/badge/Discord-dc.gg%2Fpaperstream-5865F2?style=for-the-badge&logo=discord" alt="Discord">
+      </a>
       <a class="topbar-link" href="https://bstats.org/plugin/bukkit/LuckTAB%20by%20LucasTHCR/32022" target="_blank">bStats</a>
       <button class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
     </div>
   </div>
 
   <!-- HOME -->
-  <div class="section active" id="section-home">
+  <div class="section active" id="section-lt-home">
     <div class="hero">
       <h1><span class="gradient">LuckTAB</span></h1>
-      <p>Lightweight yet powerful tab list, chat format &amp; scoreboard plugin — all configurable in a single <code>config.yml</code>.</p>
+      <p>Tab list, chat format, and scoreboard, all in one plugin — everything configurable from a single <code>config.yml</code>, no fuss.</p>
       <div class="btn-group">
         <button class="btn btn-primary" onclick="downloadLatest()">⬇ Download Latest</button>
         <a class="btn btn-secondary" href="https://modrinth.com/plugin/lucktab" target="_blank">📦 Modrinth</a>
         <a class="btn btn-secondary" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
+      </div>
+      <div class="discord-banner">
+        <a href="https://dc.gg/paperstream" target="_blank">
+          <img src="https://img.shields.io/badge/Discord-dc.gg%2Fpaperstream-5865F2?style=for-the-badge&logo=discord" alt="Discord">
+        </a>
       </div>
       <div id="dl-status">Fetching latest version...</div>
       <div class="stats" id="stats">
@@ -179,23 +241,28 @@
         <div class="stat"><div class="stat-value" id="stat-followers">—</div><div class="stat-label">Followers</div></div>
         <div class="stat"><div class="stat-value" id="stat-version">—</div><div class="stat-label">Latest Version</div></div>
       </div>
+      <h2 style="margin-top:1.5rem;">bStats</h2>
+      <p>Want to see live server/player counts, MC version breakdown, and OS stats? bStats tracks all of that publicly:</p>
+      <a class="btn btn-secondary" href="https://bstats.org/plugin/bukkit/LuckTAB%20by%20LucasTHCR/32022" target="_blank">📊 View LuckTAB on bStats</a>
     </div>
 
-    <h2>✨ Features</h2>
+    <h2>What it does</h2>
+    <p>I built LuckTAB because most tab list plugins out there felt either bloated or too limited. Here's what's actually in it:</p>
     <div class="feature-grid">
-      <div class="feature-card"><div class="icon">📋</div><div class="title">Tab-List Prefix & Sorting</div><div class="desc">Rank-based prefixes via LuckPerms with anti-flicker updates.</div></div>
-      <div class="feature-card"><div class="icon">🌈</div><div class="title">Animated Gradients</div><div class="desc">Smooth sine-based RGB gradients via <code>&lt;gradient:&gt;</code> — works everywhere.</div></div>
-      <div class="feature-card"><div class="icon">🎨</div><div class="title">Hex Color Support</div><div class="desc">Full <code>&#RRGGBB</code> hex support in all elements.</div></div>
-      <div class="feature-card"><div class="icon">📊</div><div class="title">Scoreboard Sidebar</div><div class="desc">Per-world sidebar with anti-flicker and smart change detection.</div></div>
-      <div class="feature-card"><div class="icon">💬</div><div class="title">Chat Format</div><div class="desc">Custom format per rank with full color support.</div></div>
-      <div class="feature-card"><div class="icon">🌍</div><div class="title">Per-World Config</div><div class="desc">Different designs per world — fallback to default.</div></div>
-      <div class="feature-card"><div class="icon">👻</div><div class="title">Vanish Support</div><div class="desc">Essentials, CMI, SuperVanish, PremiumVanish compatible.</div></div>
-      <div class="feature-card"><div class="icon">📡</div><div class="title">PlaceholderAPI</div><div class="desc">Any PAPI placeholder works in all elements.</div></div>
-      <div class="feature-card"><div class="icon">🔄</div><div class="title">LuckPerms Migration</div><div class="desc">Sync prefixes between config and LuckPerms with auto weight.</div></div>
-      <div class="feature-card"><div class="icon">📶</div><div class="title">Ping Colors</div><div class="desc"><code>%lucktab_ping_colored%</code> — auto green/yellow/red.</div></div>
+      <div class="feature-card"><div class="icon">📋</div><div class="title">Rank Prefixes & Sorting</div><div class="desc">Runs on LuckPerms, with anti-flicker updates so the tab list doesn't jump around.</div></div>
+      <div class="feature-card"><div class="icon">🌈</div><div class="title">Animated Gradients</div><div class="desc">Smooth RGB gradients via the <code>&lt;gradient:&gt;</code> tag, works everywhere in the plugin.</div></div>
+      <div class="feature-card"><div class="icon">🎨</div><div class="title">Hex Colors</div><div class="desc">Standard <code>&#RRGGBB</code> codes, in every text field.</div></div>
+      <div class="feature-card"><div class="icon">📊</div><div class="title">Scoreboard Sidebar</div><div class="desc">Configurable per world, with anti-flicker and smart change detection.</div></div>
+      <div class="feature-card"><div class="icon">💬</div><div class="title">Chat Format</div><div class="desc">Custom format per rank, full color support.</div></div>
+      <div class="feature-card"><div class="icon">🌍</div><div class="title">Per-World Config</div><div class="desc">Different designs depending on the world, with a fallback to default.</div></div>
+      <div class="feature-card"><div class="icon">👻</div><div class="title">Vanish Support</div><div class="desc">Works with Essentials, CMI, SuperVanish, and PremiumVanish.</div></div>
+      <div class="feature-card"><div class="icon">📡</div><div class="title">PlaceholderAPI</div><div class="desc">Any PAPI placeholder can be dropped in.</div></div>
+      <div class="feature-card"><div class="icon">🔄</div><div class="title">LuckPerms Migration</div><div class="desc">Sync prefixes between config and LuckPerms, weights calculated automatically.</div></div>
+      <div class="feature-card"><div class="icon">📶</div><div class="title">Ping Colors</div><div class="desc"><code>%lucktab_ping_colored%</code> — automatically green/yellow/red based on ping.</div></div>
     </div>
 
-    <h2>🖥️ Server Software</h2>
+    <h2>Server Software</h2>
+    <p>Runs fine everywhere, but there are a few small differences with scoreboard colors depending on the software:</p>
     <table>
       <tr><th>Feature</th><th>Paper</th><th>Spigot</th><th>Purpur</th></tr>
       <tr><td>Tab list, chat, nametag</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
@@ -203,20 +270,20 @@
       <tr><td>Scoreboard anti-flicker</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
       <tr><td>Hex/gradient in scoreboard lines</td><td><span class="badge badge-green">✅ Full</span></td><td><span class="badge badge-yellow">⚠️ Legacy only</span></td><td><span class="badge badge-green">✅ Full</span></td></tr>
     </table>
-    <div class="callout callout-tip">Recommended: Paper or Purpur for the full feature set.</div>
+    <div class="callout callout-tip">Recommended: Paper or Purpur, so you get the full feature set.</div>
 
-    <h2>📦 Dependencies</h2>
+    <h2>Dependencies</h2>
     <table>
-      <tr><th>Plugin</th><th>Required</th><th>Link</th></tr>
+      <tr><th>Plugin</th><th>Required?</th><th>Link</th></tr>
       <tr><td>LuckPerms</td><td><span class="badge badge-red">Required</span></td><td><a href="https://luckperms.net" target="_blank">luckperms.net</a></td></tr>
       <tr><td>PlaceholderAPI</td><td><span class="badge badge-green">Optional</span></td><td><a href="https://modrinth.com/plugin/placeholderapi" target="_blank">Modrinth</a></td></tr>
     </table>
   </div>
 
   <!-- GETTING STARTED -->
-  <div class="section" id="section-getting-started">
+  <div class="section" id="section-lt-getting-started">
     <h1>🚀 Getting Started</h1>
-    <h2>Requirements</h2>
+    <h2>What you need</h2>
     <table>
       <tr><th>Requirement</th><th>Version</th></tr>
       <tr><td>Paper / Purpur / Spigot</td><td>1.20+</td></tr>
@@ -227,15 +294,15 @@
     <h2>Installation</h2>
     <ol style="color:var(--text2);padding-left:1.5rem;line-height:2">
       <li>Download the latest version from <a href="https://modrinth.com/plugin/lucktab" target="_blank">Modrinth</a></li>
-      <li>Place the <code>.jar</code> into your <code>plugins/</code> folder</li>
-      <li>Make sure <strong>LuckPerms</strong> is installed</li>
+      <li>Drop the <code>.jar</code> into your <code>plugins/</code> folder</li>
+      <li>Make sure <strong>LuckPerms</strong> is installed — nothing works without it</li>
       <li>Start or restart your server</li>
-      <li>LuckTAB generates <code>plugins/LuckTAB/config.yml</code></li>
-      <li>Edit the config and run <code>/lucktab reload</code></li>
+      <li>LuckTAB will generate <code>plugins/LuckTAB/config.yml</code> automatically</li>
+      <li>Edit the config and apply changes with <code>/lucktab reload</code></li>
     </ol>
 
     <h2>Quick Setup</h2>
-    <p>Open <code>plugins/LuckTAB/config.yml</code> and configure your ranks:</p>
+    <p>Open <code>plugins/LuckTAB/config.yml</code> and set up your ranks:</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>prefixes:
   - "owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
   - "admin;&#FF5555[Admin] &7;;&#FF5555"
@@ -245,30 +312,30 @@
 
     <p>Format: <code>luckperms_group;prefix;suffix;namecolor</code></p>
     <table>
-      <tr><th>Part</th><th>Description</th></tr>
+      <tr><th>Part</th><th>What it does</th></tr>
       <tr><td><code>group</code></td><td>Exact LuckPerms group name (case-sensitive)</td></tr>
-      <tr><td><code>prefix</code></td><td>Shown in tab list, nametag and chat</td></tr>
-      <tr><td><code>suffix</code></td><td>Leave empty with <code>;;</code> if not needed</td></tr>
-      <tr><td><code>namecolor</code></td><td>Color applied to the player name</td></tr>
+      <tr><td><code>prefix</code></td><td>Shown in the tab list, nametag, and chat</td></tr>
+      <tr><td><code>suffix</code></td><td>Just leave it empty with <code>;;</code> if you don't need one</td></tr>
+      <tr><td><code>namecolor</code></td><td>Color applied to the player's name itself</td></tr>
     </table>
 
-    <h2>LuckPerms Setup</h2>
+    <h2>Setting Up LuckPerms</h2>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lp user &lt;player&gt; group set owner</code></pre>
-    <div class="callout callout-info">The group name must match exactly what you have in the <code>prefixes</code> list.</div>
+    <div class="callout callout-info">The group name has to match exactly what's in your <code>prefixes</code> list, or it just won't pick it up.</div>
 
-    <h2>Migrate from LuckPerms</h2>
-    <p>Already have prefixes in LuckPerms? Pull them into config:</p>
+    <h2>Migrating from LuckPerms</h2>
+    <p>Already have prefixes set up in LuckPerms? You can pull them straight into your config:</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate from-luckperms</code></pre>
-    <p>Or push your config prefixes into LuckPerms:</p>
+    <p>Or the other way around, push your config prefixes into LuckPerms:</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate to-luckperms</code></pre>
   </div>
 
   <!-- CONFIGURATION -->
-  <div class="section" id="section-configuration">
+  <div class="section" id="section-lt-configuration">
     <h1>⚙️ Configuration</h1>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ── Prefix Source ─────────────────────────────
-# lucktab   → use prefixes from this config (default)
-# luckperms → use prefixes directly from LuckPerms meta
+# lucktab   → prefixes come from this config (default)
+# luckperms → prefixes are pulled straight from LuckPerms meta
 prefix-source: lucktab
 
 # ── Ping Colors ───────────────────────────────
@@ -277,7 +344,7 @@ ping-colors:
   medium: 100 # &lt;= 100ms → yellow
               # &gt;  100ms → red
 
-# ── Tab-List ──────────────────────────────────
+# ── Tab List ──────────────────────────────────
 tab-list:
   show-only-same-world: false
 
@@ -287,7 +354,7 @@ chatFormat: "%chatPrefix%%playerName% &8» &7%message%"
 
 # ── Rank Prefixes ─────────────────────────────
 # Format: "group;prefix;suffix;namecolor"
-# Top = highest priority | suffix can be empty: "group;prefix;;color"
+# Top = highest priority | suffix can stay empty: "group;prefix;;color"
 prefixes:
   - "owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
   - "admin;&#FF5555[Admin] &7;;&#FF5555"
@@ -296,8 +363,8 @@ prefixes:
   - "default;&7[Player] &7;;&7"
 
 # ── Header & Footer ───────────────────────────
-# Per-world: add a section with the exact world name as key
-# Falls back to "default" if no world-specific design is found
+# Per-world: add a section using the exact world name as the key
+# Falls back to "default" if nothing matches
 header-footer:
   enabled: true
   designs:
@@ -334,21 +401,21 @@ scoreboard:
 
     <h2>Prefix Source</h2>
     <table>
-      <tr><th>Value</th><th>Description</th></tr>
-      <tr><td><code>lucktab</code></td><td>Prefixes are read from config (default)</td></tr>
-      <tr><td><code>luckperms</code></td><td>Prefixes read directly from LuckPerms player meta — respects inheritance</td></tr>
+      <tr><th>Value</th><th>What it means</th></tr>
+      <tr><td><code>lucktab</code></td><td>Prefixes come from the config (default)</td></tr>
+      <tr><td><code>luckperms</code></td><td>Prefixes are read directly from LuckPerms meta — respects inheritance</td></tr>
     </table>
 
     <h2>Per-World Designs</h2>
-    <p>Add a section with the <strong>exact world name</strong> under <code>designs</code>. LuckTAB falls back to <code>default</code> automatically.</p>
+    <p>Add a section using the <strong>exact world name</strong> under <code>designs</code>. If nothing matches, LuckTAB falls back to <code>default</code> automatically.</p>
     <div class="callout callout-tip">World names are case-sensitive. Use <code>/mv list</code> or check your server folder to get the exact name.</div>
 
     <h2>Rank Priority</h2>
-    <p>The <strong>order</strong> of entries in <code>prefixes</code> determines priority — <strong>top = highest</strong>. If a player has multiple groups, the highest entry wins.</p>
+    <p>The <strong>order</strong> of entries in <code>prefixes</code> decides priority — <strong>top = highest</strong>. If a player has multiple groups, the topmost match wins.</p>
   </div>
 
   <!-- COLORS -->
-  <div class="section" id="section-colors">
+  <div class="section" id="section-lt-colors">
     <h1>🎨 Color Codes</h1>
 
     <h2>Legacy Color Codes</h2>
@@ -357,7 +424,7 @@ scoreboard:
       <tr><td><code>&0</code></td><td><span class="color-preview" style="background:#000"></span>Black</td><td><code>&l</code></td><td><strong>Bold</strong></td></tr>
       <tr><td><code>&1</code></td><td><span class="color-preview" style="background:#00a"></span>Dark Blue</td><td><code>&o</code></td><td><em>Italic</em></td></tr>
       <tr><td><code>&2</code></td><td><span class="color-preview" style="background:#0a0"></span>Dark Green</td><td><code>&n</code></td><td><u>Underline</u></td></tr>
-      <tr><td><code>&3</code></td><td><span class="color-preview" style="background:#0aa"></span>Dark Aqua</td><td><code>&m</code></td><td><s>Strike</s></td></tr>
+      <tr><td><code>&3</code></td><td><span class="color-preview" style="background:#0aa"></span>Dark Aqua</td><td><code>&m</code></td><td><s>Strikethrough</s></td></tr>
       <tr><td><code>&4</code></td><td><span class="color-preview" style="background:#a00"></span>Dark Red</td><td><code>&k</code></td><td>Obfuscated</td></tr>
       <tr><td><code>&5</code></td><td><span class="color-preview" style="background:#a0a"></span>Dark Purple</td><td><code>&r</code></td><td>Reset</td></tr>
       <tr><td><code>&6</code></td><td><span class="color-preview" style="background:#fa0"></span>Gold</td><td></td><td></td></tr>
@@ -373,31 +440,31 @@ scoreboard:
     </table>
 
     <h2>Hex Colors</h2>
-    <p>Use <code>&#RRGGBB</code> for any RGB color:</p>
+    <p>Use <code>&#RRGGBB</code> for any RGB color you want:</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Red prefix
 "admin;&#FF0000[Admin] &7;;&#FF0000"
 
-# Orange gradient color
-"owner;[Owner] ;;&# FF7700"
+# Orange
+"owner;[Owner] ;;&#FF7700"
 
 # Custom purple
 "mod;&#AA00FF[Mod] &7;;&#AA00FF"</code></pre>
 
     <h2>Animated Gradients</h2>
-    <p>Use <code>&lt;gradient:#RRGGBB:#RRGGBB&gt;text&lt;/gradient&gt;</code>:</p>
+    <p>Use <code>&lt;gradient:#RRGGBB:#RRGGBB&gt;text&lt;/gradient&gt;</code> to build your own gradients:</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Red to orange
 "owner;&lt;gradient:#FF0000:#FF7700&gt;[Owner] &lt;/gradient&gt;;;&#FF7700"
 
 # Blue to purple
 "admin;&lt;gradient:#5555FF:#AA00FF&gt;[Admin] &lt;/gradient&gt;;;&#5555FF"
 
-# Bold formatting preserved inside gradient
+# Bold formatting is preserved inside the gradient
 "owner;&lt;gradient:#FF0000:#FF7700&gt;&l[Owner]&r &lt;/gradient&gt;;;&#FF7700"</code></pre>
-    <div class="callout callout-warn">Hex colors and gradients in scoreboard lines require Paper or Purpur. On Spigot, only legacy <code>&</code> codes work in scoreboard lines.</div>
+    <div class="callout callout-warn">Hex colors and gradients in scoreboard lines require Paper or Purpur. On Spigot, only legacy <code>&</code> codes work there.</div>
   </div>
 
   <!-- PLACEHOLDERS -->
-  <div class="section" id="section-placeholders">
+  <div class="section" id="section-lt-placeholders">
     <h1>📋 Placeholders</h1>
     <h2>Built-in Placeholders</h2>
     <table>
@@ -407,7 +474,7 @@ scoreboard:
       <tr><td><code>%server_online%</code></td><td>Online player count</td><td>5</td></tr>
       <tr><td><code>%server_max_players%</code></td><td>Max player count</td><td>20</td></tr>
       <tr><td><code>%player_ping%</code></td><td>Ping in ms (plain)</td><td>42</td></tr>
-      <tr><td><code>%lucktab_ping_colored%</code></td><td>Ping colored green/yellow/red</td><td>§a42ms</td></tr>
+      <tr><td><code>%lucktab_ping_colored%</code></td><td>Ping, colored green/yellow/red</td><td>§a42ms</td></tr>
       <tr><td><code>%lucktab_rank%</code></td><td>Colored rank prefix</td><td>§c[Admin] §7</td></tr>
       <tr><td><code>%lucktab_prefix%</code></td><td>Same as %lucktab_rank%</td><td>§c[Admin] §7</td></tr>
       <tr><td><code>%lucktab_suffix%</code></td><td>Rank suffix</td><td>§7[Staff]</td></tr>
@@ -429,21 +496,21 @@ scoreboard:
   - "&7Balance: &f%vault_eco_balance%"
   - "&7Deaths: &f%statistic_deaths%"
   - "&7Level: &f%player_level%"</code></pre>
-    <div class="callout callout-info">PlaceholderAPI placeholders are processed after LuckTAB built-in placeholders.</div>
+    <div class="callout callout-info">PlaceholderAPI placeholders are processed after LuckTAB's built-in placeholders.</div>
   </div>
 
   <!-- COMMANDS -->
-  <div class="section" id="section-commands">
+  <div class="section" id="section-lt-commands">
     <h1>🔑 Commands & Permissions</h1>
     <table>
       <tr><th>Command</th><th>Permission</th><th>Default</th><th>Description</th></tr>
-      <tr><td><code>/lucktab reload</code></td><td><code>lucktab.reload</code></td><td>OP</td><td>Reload config without restart</td></tr>
+      <tr><td><code>/lucktab reload</code></td><td><code>lucktab.reload</code></td><td>OP</td><td>Reload config without a server restart</td></tr>
       <tr><td><code>/lucktab migrate to-luckperms</code></td><td><code>lucktab.migrate</code></td><td>OP</td><td>Push config prefixes to LuckPerms</td></tr>
-      <tr><td><code>/lucktab migrate from-luckperms</code></td><td><code>lucktab.migrate</code></td><td>OP</td><td>Pull LuckPerms prefixes to config</td></tr>
+      <tr><td><code>/lucktab migrate from-luckperms</code></td><td><code>lucktab.migrate</code></td><td>OP</td><td>Pull LuckPerms prefixes into config</td></tr>
     </table>
 
     <h2>/lucktab migrate to-luckperms</h2>
-    <p>Pushes all prefixes and suffixes from <code>config.yml</code> into LuckPerms group meta with automatic weight calculation:</p>
+    <p>Pushes every prefix and suffix from <code>config.yml</code> into LuckPerms group meta, with automatic weight calculation:</p>
     <table>
       <tr><th>Rank position</th><th>Weight</th><th>Prefix priority</th></tr>
       <tr><td>1st (top)</td><td>200</td><td>200</td></tr>
@@ -451,66 +518,397 @@ scoreboard:
       <tr><td>3rd</td><td>180</td><td>180</td></tr>
       <tr><td>...</td><td>...</td><td>...</td></tr>
     </table>
-    <div class="callout callout-tip">Only LuckTAB-managed nodes are overwritten — other plugins' nodes are preserved.</div>
+    <div class="callout callout-tip">Only LuckTAB-managed nodes get overwritten — other plugins' nodes are left alone.</div>
 
     <h2>/lucktab migrate from-luckperms</h2>
-    <p>Pulls all group prefixes and suffixes from LuckPerms into <code>config.yml</code>. Groups without a prefix are skipped. Config is saved and rank map reloaded automatically.</p>
+    <p>Pulls every group prefix and suffix from LuckPerms into <code>config.yml</code>. Groups without a prefix are skipped. The config is saved and the rank map reloaded automatically.</p>
     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/lucktab migrate from-luckperms
 /lucktab reload</code></pre>
   </div>
 
   <!-- FAQ -->
-  <div class="section" id="section-faq">
+  <div class="section" id="section-lt-faq">
     <h1>❓ FAQ</h1>
 
-    <h2>My rank prefix is not showing</h2>
+    <h2>My rank prefix isn't showing up</h2>
     <ol style="color:var(--text2);padding-left:1.5rem;line-height:2">
-      <li>Make sure the group name in <code>prefixes</code> matches exactly the LuckPerms group name</li>
-      <li>Check player group: <code>/lp user &lt;player&gt; info</code></li>
+      <li>Check that the group name in <code>prefixes</code> matches the LuckPerms group name exactly</li>
+      <li>Check the player's group: <code>/lp user &lt;player&gt; info</code></li>
       <li>Run <code>/lucktab reload</code></li>
       <li>Top entry = highest priority — make sure owner is above default</li>
     </ol>
 
     <h2>The scoreboard is flickering</h2>
-    <p>Make sure you are running <strong>Paper or Purpur</strong>. On Spigot, scoreboard lines with hex/gradient colors may flicker slightly due to a Minecraft client limitation.</p>
+    <p>Make sure you're running <strong>Paper or Purpur</strong>. On Spigot, scoreboard lines using hex/gradient colors can flicker a bit — that's a Minecraft client limitation, not the plugin.</p>
 
     <h2>Gradients look choppy or jump</h2>
-    <p>This can happen if the text is very short (few characters = few color steps). Longer text produces smoother gradients. The animation uses sine-based interpolation which is smooth by design.</p>
+    <p>Usually happens with very short text — fewer characters means fewer color steps. Longer text gets a smoother gradient automatically, since the interpolation is sine-based.</p>
 
-    <h2>%lucktab_rank% shows raw gradient tag</h2>
-    <p>LuckTAB cannot find a matching rank for the player. Make sure:</p>
+    <h2>%lucktab_rank% shows the raw gradient tag</h2>
+    <p>That means LuckTAB can't find a matching rank for the player. Check the following:</p>
     <ul style="color:var(--text2);padding-left:1.5rem;line-height:2">
-      <li>The player has a LuckPerms group assigned</li>
-      <li>That group exists in the <code>prefixes</code> list</li>
-      <li>The group name matches exactly (case-sensitive)</li>
+      <li>Does the player actually have a LuckPerms group assigned?</li>
+      <li>Is that group in the <code>prefixes</code> list?</li>
+      <li>Does the spelling match exactly?</li>
     </ul>
 
     <h2>Does LuckTAB work on Folia?</h2>
-    <p>No. LuckTAB uses Bukkit's scheduler which is not Folia-compatible. There are no plans to support Folia.</p>
+    <p>No. LuckTAB uses Bukkit's scheduler, which isn't compatible with Folia. There are no plans to support it right now.</p>
 
     <h2>Does LuckTAB work on BungeeCord/Velocity?</h2>
     <p>LuckTAB is a per-server plugin. For network-wide player counts, use a PlaceholderAPI expansion that supports BungeeCord.</p>
 
     <h2>How do I report a bug?</h2>
-    <p>Join the Discord: <a href="https://dc.gg/paperstream" target="_blank">dc.gg/paperstream</a></p>
+    <p>Fastest way is via Discord: <a href="https://dc.gg/paperstream" target="_blank">dc.gg/paperstream</a></p>
   </div>
 
 </main>
 
+<!-- ============================================================= -->
+<!-- VIEWDISTANCETWEAKS MAIN -->
+<!-- ============================================================= -->
+<main class="main plugin-page" id="page-vdt" style="display:none;">
+  <div class="topbar">
+    <button class="menu-btn" id="menu-btn-vdt" onclick="toggleSidebar('vdt')">☰</button>
+    <div class="topbar-links">
+      <a class="topbar-link" href="https://modrinth.com/plugin/viewdistancetweaks" target="_blank">Modrinth</a>
+      <a class="discord-badge" href="https://dc.gg/paperstream" target="_blank">
+        <img src="https://img.shields.io/badge/Discord-dc.gg%2Fpaperstream-5865F2?style=for-the-badge&logo=discord" alt="Discord">
+      </a>
+      <a class="topbar-link" href="https://bstats.org/plugin/bukkit/ViewDistance-Tweaks/32343" target="_blank">bStats</a>
+      <button class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="section active" id="section-vdt-home">
+    <div class="hero">
+      <h1><span class="gradient-blue">ViewDistanceTweaks</span></h1>
+      <p>Automatically adjusts view and simulation distance per world based on current server load. Lightweight, fully configurable, built for servers where performance actually matters.</p>
+      <div class="btn-group">
+        <a class="btn btn-primary-blue" href="https://modrinth.com/plugin/viewdistancetweaks" target="_blank">📦 View on Modrinth</a>
+        <a class="btn btn-secondary" href="https://dc.gg/paperstream" target="_blank">💬 Discord</a>
+        <a class="btn btn-secondary" href="https://bstats.org/plugin/bukkit/ViewDistance-Tweaks/32343" target="_blank">📊 bStats</a>
+      </div>
+      <div class="discord-banner">
+        <a href="https://dc.gg/paperstream" target="_blank">
+          <img src="https://img.shields.io/badge/Discord-dc.gg%2Fpaperstream-5865F2?style=for-the-badge&logo=discord" alt="Discord">
+        </a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-value blue">3</div><div class="stat-label">Modes</div></div>
+        <div class="stat"><div class="stat-value blue">20+</div><div class="stat-label">Placeholders</div></div>
+        <div class="stat"><div class="stat-value blue">1.21.x</div><div class="stat-label">Paper Version</div></div>
+      </div>
+      <h2 style="margin-top:1.5rem;">bStats</h2>
+      <p>Want to see live server/player counts, MC version breakdown, and OS stats? bStats tracks all of that publicly:</p>
+      <a class="btn btn-primary-blue" href="https://bstats.org/plugin/bukkit/ViewDistance-Tweaks/32343" target="_blank">📊 View ViewDistanceTweaks on bStats</a>
+    </div>
+
+    <h2>What it's about</h2>
+    <p>In short: the plugin constantly checks how loaded your server is (MSPT and how many chunks are loaded), and based on that, adjusts view and simulation distance per world automatically. No more manually tweaking things when everyone suddenly logs on in the evening.</p>
+
+    <h2>Features</h2>
+    <table>
+      <tr><th>Feature</th><th>Description</th></tr>
+      <tr><td>Dynamic Sim & View Distance</td><td>Automatically adjusts per world based on server load</td></tr>
+      <tr><td>3 Adjustment Modes</td><td>Proactive, reactive, or mixed — your choice</td></tr>
+      <tr><td>MSPT-based Prediction</td><td>A linear regression model prevents bad increases before they happen</td></tr>
+      <tr><td>Per-world Configuration</td><td>Each world gets its own min/max, weight, and exclusion settings</td></tr>
+      <tr><td>Temporary Overrides</td><td>Lock distances for a set duration via command</td></tr>
+      <tr><td>PlaceholderAPI Support</td><td>20+ placeholders for scoreboards, tab lists, and more</td></tr>
+      <tr><td>In-game Announcements</td><td>Notify staff on distance changes, format fully configurable</td></tr>
+      <tr><td>/vdt Command Suite</td><td>Status, reload, enable/disable, manual override — all in one command</td></tr>
+    </table>
+
+    <h2>Dependencies</h2>
+    <table>
+      <tr><th>Plugin</th><th>Required?</th><th>Link</th></tr>
+      <tr><td>Paper 1.21.x / 26.x</td><td><span class="badge badge-red">Required</span></td><td><a href="https://papermc.io" target="_blank">papermc.io</a></td></tr>
+      <tr><td>PlaceholderAPI</td><td><span class="badge badge-green">Optional</span></td><td><a href="https://modrinth.com" target="_blank">Modrinth</a></td></tr>
+    </table>
+    <div class="callout callout-warn">Paper (and forks like Purpur) only — Spigot isn't supported, since the plugin relies on Paper-specific APIs.</div>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div class="section" id="section-vdt-changelog">
+    <h1>📝 Changelog</h1>
+    <h2>Latest Update</h2>
+    <ul style="color:var(--text2);padding-left:1.5rem;line-height:2.1">
+      <li><strong>Fixed:</strong> Mixed mode's increase and decrease branches were identical — the increase branch now correctly uses <code>Math.max</code> instead of duplicating the decrease logic (<code>Math.min</code>).</li>
+      <li><strong>Fixed:</strong> Possible division by zero when <code>ticks-per-check</code> is set below 20.</li>
+      <li><strong>Fixed:</strong> <code>mspt-collection-period</code> is now validated to be greater than 0 on load.</li>
+      <li><strong>Fixed:</strong> <code>announce-changes-in-chat</code> no longer iterates over players when no one is online.</li>
+      <li><strong>Fixed:</strong> <code>calcProactiveSimDist</code> now actually uses the <code>totalTicking</code> parameter instead of ignoring it.</li>
+      <li><strong>Fixed:</strong> <code>colorize()</code> no longer corrupts world names that contain an <code>&</code> character.</li>
+      <li><strong>Added:</strong> bStats metrics integration.</li>
+      <li><strong>Added:</strong> Built-in update checker.</li>
+    </ul>
+    <div class="callout callout-info">Older changelog entries live on the Modrinth project page.</div>
+  </div>
+
+  <!-- CONFIGURATION -->
+  <div class="section" id="section-vdt-configuration">
+    <h1>⚙️ Configuration</h1>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ============================================================
+#   ViewDistanceTweaks — LucasTHCR Edition
+# ============================================================
+
+version: 1
+
+# Set to true once you've configured the plugin.
+enabled: false
+
+# Adjustment mode:
+#   proactive — adjusts based on chunk count targets
+#   reactive  — adjusts based on MSPT thresholds
+#   mixed     — combines both; prioritizes reducing distance under load (recommended)
+adjustment-mode: mixed
+
+# Ticks to wait after startup before the first check runs.
+# 2400 = 2 minutes — lets the server stabilize after a restart.
+start-delay: 2400
+
+# How often to run a check (in ticks). 600 = every 30 seconds.
+ticks-per-check: 600
+
+# How many consecutive checks must confirm an increase before it's applied.
+# Higher = more conservative. Recommended: 8–15.
+passed-checks-for-increase: 10
+
+# How many consecutive checks must confirm a decrease before it's applied.
+# 1 = immediate reaction to overload (recommended).
+passed-checks-for-decrease: 1
+
+# Log a console message whenever distances change.
+log-changes: true
+
+# Send an in-game message to players with the viewdistancetweaks.notify permission.
+announce-changes-in-chat: false
+
+# Format of the announce message. Supports & color codes.
+# Placeholders: {world}, {oldSim}, {newSim}, {oldView}, {newView}
+announce-format: "&7[VDT] &f{world}: Sim &e{oldSim}&7→&a{newSim} &f| View &e{oldView}&7→&a{newView}"
+
+# ============================================================
+#   PROACTIVE MODE
+# ============================================================
+proactive-mode-settings:
+
+  # Maximum total ticking chunks across all worlds.
+  # Formula: (2*sim+1)^2 * players
+  # Example: 20 players at sim 8 → (17)^2 * 20 = 5780
+  global-ticking-chunk-count-target: 5780
+
+  # Maximum total non-ticking chunks (view distance beyond sim distance).
+  # Formula: ((2*view+1)^2 - (2*sim+1)^2) * players
+  # Example: 20 players, view 12, sim 8 → (625 - 289) * 20 = 6720
+  global-non-ticking-chunk-count-target: 6720
+
+# ============================================================
+#   REACTIVE MODE
+# ============================================================
+reactive-mode-settings:
+
+  # Below this MSPT, consider increasing distances.
+  increase-mspt-threshold: 40.0
+
+  # Above this MSPT, consider decreasing distances.
+  # A full tick takes 50ms. Above ~47ms players start noticing lag.
+  decrease-mspt-threshold: 47.0
+
+  mspt-tracker-settings:
+
+    # How many ticks of data to average for the MSPT calculation.
+    # 1200 = 1 minute. Higher = more stable but slower to react.
+    collection-period: 1200
+
+    mspt-prediction:
+      # Use historical MSPT/chunk data to block increases that would cause lag.
+      enabled: true
+
+      # How many minutes of history to keep for the prediction model.
+      history-length: 30
+
+      # Minimum data points before the prediction model kicks in.
+      # Prevents bad decisions right after a server restart.
+      min-samples: 5
+
+# ============================================================
+#   WORLD SETTINGS
+# ============================================================
+# Worlds not listed here inherit the 'default' settings.
+# Use the exact world folder name as the key.
+
+world-settings:
+
+  default:
+    simulation-distance:
+      exclude: false
+      min-simulation-distance: 4
+      max-simulation-distance: 12
+
+    view-distance:
+      exclude: false
+      min-view-distance: 6
+      max-view-distance: 16
+
+    # How much weight this world's chunks carry in global calculations.
+    # 0.5 = half weight (e.g. The End, which has a lot of empty chunks).
+    # 0.0 = excluded from the global chunk budget entirely.
+    chunk-weight: 1.0
+
+    chunk-counter-settings:
+      # Count overlapping chunks from nearby players only once.
+      exclude-overlap: true
+
+    # Never reduce distances below the number of players currently in this world.
+    never-reduce-below-players: false
+
+    # Gives this world 50% more chunk budget in proactive calculations.
+    # Useful for the main overworld on multi-world servers.
+    priority-world: false
+
+  # Example — Nether
+  # world_nether:
+  #   simulation-distance:
+  #     min-simulation-distance: 4
+  #     max-simulation-distance: 8
+  #   view-distance:
+  #     min-view-distance: 4
+  #     max-view-distance: 10
+  #   chunk-weight: 0.8
+
+  # Example — The End (lots of empty chunks → lower weight)
+  # world_the_end:
+  #   simulation-distance:
+  #     min-simulation-distance: 4
+  #     max-simulation-distance: 10
+  #   view-distance:
+  #     min-view-distance: 6
+  #     max-view-distance: 14
+  #   chunk-weight: 0.5
+
+  # Example — Main world with priority
+  # world:
+  #   simulation-distance:
+  #     min-simulation-distance: 6
+  #     max-simulation-distance: 12
+  #   view-distance:
+  #     min-view-distance: 8
+  #     max-view-distance: 16
+  #   chunk-weight: 1.0
+  #   priority-world: true</code></pre>
+    <div class="callout callout-tip">Best to leave the defaults running for a bit and watch <code>/vdt status</code> before touching the thresholds.</div>
+  </div>
+
+  <!-- COMMANDS -->
+  <div class="section" id="section-vdt-commands">
+    <h1>🔑 Commands</h1>
+    <table>
+      <tr><th>Command</th><th>Permission</th><th>Default</th></tr>
+      <tr><td><code>/vdt reload</code></td><td><code>viewdistancetweaks.vdt.command.reload</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt status [--weight]</code></td><td><code>viewdistancetweaks.vdt.command.status</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt simulationdistance &lt;value&gt; [world] [--duration &lt;min&gt;]</code></td><td><code>viewdistancetweaks.vdt.command.simulationdistance</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt viewdistance &lt;value&gt; [world] [--duration &lt;min&gt;]</code></td><td><code>viewdistancetweaks.vdt.command.viewdistance</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt enable</code></td><td><code>viewdistancetweaks.vdt.command.reload</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt disable</code></td><td><code>viewdistancetweaks.vdt.command.reload</code></td><td>OP</td></tr>
+      <tr><td><code>/vdt mspt</code></td><td><code>viewdistancetweaks.command.vdt</code></td><td>OP</td></tr>
+      <tr><td>—</td><td><code>viewdistancetweaks.notify</code></td><td>OP — receives announce messages</td></tr>
+    </table>
+
+    <h2>Temporary Overrides</h2>
+    <p>Using <code>--duration</code> you can lock a distance for a set number of minutes without touching the config — handy for events or quick testing:</p>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>/vdt viewdistance 10 world --duration 30</code></pre>
+    <p>Once the duration is up, the plugin goes back to automatic control.</p>
+  </div>
+
+  <!-- PLACEHOLDERS -->
+  <div class="section" id="section-vdt-placeholders">
+    <h1>📋 Placeholders</h1>
+    <p>Requires PlaceholderAPI to be installed.</p>
+    <table>
+      <tr><th>Placeholder</th><th>Description</th></tr>
+      <tr><td><code>%viewdistancetweaks_mspt%</code></td><td>Current average MSPT</td></tr>
+      <tr><td><code>%viewdistancetweaks_tps%</code></td><td>Current TPS</td></tr>
+      <tr><td><code>%viewdistancetweaks_mspt_color%</code></td><td>&a / &e / &c based on MSPT</td></tr>
+      <tr><td><code>%viewdistancetweaks_tps_color%</code></td><td>&a / &e / &c based on TPS</td></tr>
+      <tr><td><code>%viewdistancetweaks_mode%</code></td><td>Active adjustment mode</td></tr>
+      <tr><td><code>%viewdistancetweaks_enabled%</code></td><td>true or false</td></tr>
+      <tr><td><code>%viewdistancetweaks_sim_distance%</code></td><td>Simulation distance (first world)</td></tr>
+      <tr><td><code>%viewdistancetweaks_sim_distance_&lt;world&gt;%</code></td><td>Simulation distance of a specific world</td></tr>
+      <tr><td><code>%viewdistancetweaks_view_distance_&lt;world&gt;%</code></td><td>View distance of a specific world</td></tr>
+      <tr><td><code>%viewdistancetweaks_min_sim_distance_&lt;world&gt;%</code></td><td>Configured minimum sim distance</td></tr>
+      <tr><td><code>%viewdistancetweaks_max_sim_distance_&lt;world&gt;%</code></td><td>Configured maximum sim distance</td></tr>
+      <tr><td><code>%viewdistancetweaks_min_view_distance_&lt;world&gt;%</code></td><td>Configured minimum view distance</td></tr>
+      <tr><td><code>%viewdistancetweaks_max_view_distance_&lt;world&gt;%</code></td><td>Configured maximum view distance</td></tr>
+      <tr><td><code>%viewdistancetweaks_chunk_count%</code></td><td>Total chunks loaded globally</td></tr>
+      <tr><td><code>%viewdistancetweaks_chunk_count_&lt;world&gt;%</code></td><td>Chunks loaded in a specific world</td></tr>
+      <tr><td><code>%viewdistancetweaks_ticking_chunk_count%</code></td><td>Total ticking chunks globally</td></tr>
+      <tr><td><code>%viewdistancetweaks_ticking_chunk_count_&lt;world&gt;%</code></td><td>Ticking chunks in a specific world</td></tr>
+      <tr><td><code>%viewdistancetweaks_nonticking_chunk_count%</code></td><td>Total non-ticking chunks globally</td></tr>
+      <tr><td><code>%viewdistancetweaks_nonticking_chunk_count_&lt;world&gt;%</code></td><td>Non-ticking chunks in a specific world</td></tr>
+      <tr><td><code>%viewdistancetweaks_chunk_weight_&lt;world&gt;%</code></td><td>Configured chunk weight of a world</td></tr>
+    </table>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section" id="section-vdt-howitworks">
+    <h1>🔧 How It Works</h1>
+    <p>The plugin measures MSPT (milliseconds per tick) every tick, and also looks at how many chunks players currently have loaded. Based on both, it decides whether simulation and view distance should go up, stay the same, or come down.</p>
+
+    <h2>Proactive Mode</h2>
+    <p>Targets a configured maximum chunk count and calculates the ideal distance directly — thinking ahead rather than reacting.</p>
+
+    <h2>Reactive Mode</h2>
+    <p>Simply reacts to MSPT crossing configurable thresholds. Simpler, more direct approach.</p>
+
+    <h2>Mixed Mode (recommended)</h2>
+    <p>Combines both approaches, and always prioritizes reducing distance when the server is under load — safety first.</p>
+
+    <h2>The prediction model behind the scenes</h2>
+    <p>A built-in linear regression model tracks historical MSPT/chunk-count pairs and blocks increases when it predicts the server would end up crossing the decrease threshold. That's what prevents the classic increase → lag → decrease loop.</p>
+
+    <div class="callout callout-info">It's worth giving the plugin a few minutes of observation time (<code>start-delay</code>) before it starts acting — right after a restart, the numbers are still settling.</div>
+  </div>
+
+  <div class="credits">
+    <span style="color:var(--text2);font-size:0.85rem;">By LucasTHCR — questions and bugs are welcome on Discord:</span>
+    <a href="https://dc.gg/paperstream" target="_blank">
+      <img src="https://img.shields.io/badge/Discord-dc.gg%2Fpaperstream-5865F2?style=for-the-badge&logo=discord" alt="Discord">
+    </a>
+  </div>
+</main>
+
 <script>
-// Navigation
+// Plugin switcher
+function switchPlugin(plugin, el) {
+  document.getElementById('page-lucktab').style.display = plugin === 'lucktab' ? 'block' : 'none';
+  document.getElementById('page-vdt').style.display = plugin === 'vdt' ? 'block' : 'none';
+  document.getElementById('sidebar-lucktab').style.display = plugin === 'lucktab' ? 'block' : 'none';
+  document.getElementById('sidebar-vdt').style.display = plugin === 'vdt' ? 'block' : 'none';
+  document.querySelectorAll('.plugin-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.plugin-btn').forEach(b => {
+    if (b.textContent.trim() === (plugin === 'lucktab' ? 'LuckTAB' : 'ViewDistanceTweaks')) b.classList.add('active');
+  });
+}
+
+// Navigation within a plugin page
 function show(page, el) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const prefix = page.startsWith('vdt-') ? 'vdt' : 'lt';
+  const sidebarId = prefix === 'vdt' ? 'sidebar-vdt' : 'sidebar-lucktab';
+  document.querySelectorAll('#page-' + (prefix === 'vdt' ? 'vdt' : 'lucktab') + ' .section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#' + sidebarId + ' .nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById('section-' + page).classList.add('active');
   if (el) el.classList.add('active');
-  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  if (window.innerWidth <= 768) document.getElementById(sidebarId).classList.remove('open');
   return false;
 }
 
-// Sidebar toggle
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+// Sidebar toggle (mobile)
+function toggleSidebar(plugin) {
+  const id = plugin === 'vdt' ? 'sidebar-vdt' : 'sidebar-lucktab';
+  document.getElementById(id).classList.toggle('open');
 }
 
 // Theme toggle
@@ -518,19 +916,20 @@ let isDark = true;
 function toggleTheme() {
   isDark = !isDark;
   document.body.classList.toggle('light', !isDark);
-  document.querySelector('.theme-btn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  document.querySelectorAll('.theme-btn').forEach(b => b.textContent = isDark ? '🌙 Dark' : '☀️ Light');
 }
 
 // Copy code
 function copyCode(btn) {
   const code = btn.nextElementSibling.textContent;
   navigator.clipboard.writeText(code).then(() => {
+    const original = btn.textContent;
     btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy', 2000);
+    setTimeout(() => btn.textContent = original === 'Copied!' ? 'Copy' : original, 2000);
   });
 }
 
-// Download latest via Modrinth API
+// Download latest via Modrinth API (LuckTAB)
 async function downloadLatest() {
   const status = document.getElementById('dl-status');
   status.style.display = 'block';
@@ -555,22 +954,39 @@ async function downloadLatest() {
   }
 }
 
-// Load stats from Modrinth API
+// Load stats from Modrinth API (LuckTAB) — each request handled independently
+// so one failing call doesn't blank out the others.
 async function loadStats() {
+  document.getElementById('sidebar-version').textContent = 'latest';
+
   try {
-    const [project, versions] = await Promise.all([
-      fetch('https://api.modrinth.com/v2/project/MzWKBKRk').then(r => r.json()),
-      fetch('https://api.modrinth.com/v2/project/MzWKBKRk/version').then(r => r.json())
-    ]);
-    document.getElementById('stat-downloads').textContent = project.downloads?.toLocaleString() || '—';
-    document.getElementById('stat-followers').textContent = project.followers?.toLocaleString() || '—';
-    if (versions && versions.length > 0) {
+    const res = await fetch('https://api.modrinth.com/v2/project/MzWKBKRk');
+    if (!res.ok) throw new Error('project fetch failed: ' + res.status);
+    const project = await res.json();
+    document.getElementById('stat-downloads').textContent =
+      typeof project.downloads === 'number' ? project.downloads.toLocaleString() : 'n/a';
+    document.getElementById('stat-followers').textContent =
+      typeof project.followers === 'number' ? project.followers.toLocaleString() : 'n/a';
+  } catch (e) {
+    console.error('Failed to load Modrinth project stats', e);
+    document.getElementById('stat-downloads').textContent = 'n/a';
+    document.getElementById('stat-followers').textContent = 'n/a';
+  }
+
+  try {
+    const res = await fetch('https://api.modrinth.com/v2/project/MzWKBKRk/version');
+    if (!res.ok) throw new Error('version fetch failed: ' + res.status);
+    const versions = await res.json();
+    if (Array.isArray(versions) && versions.length > 0) {
       const v = versions[0].version_number;
       document.getElementById('stat-version').textContent = v;
       document.getElementById('sidebar-version').textContent = v;
+    } else {
+      document.getElementById('stat-version').textContent = 'n/a';
     }
-  } catch(e) {
-    document.getElementById('sidebar-version').textContent = 'latest';
+  } catch (e) {
+    console.error('Failed to load Modrinth version info', e);
+    document.getElementById('stat-version').textContent = 'n/a';
   }
 }
 
